@@ -1,0 +1,77 @@
+{
+  "system": {
+    "name": "Workflow Automation System",
+    "version": "5.0.0",
+    "description": "Bi-directional GitHub repository sync automation platform"
+  },
+  "repositories": {
+    "route1": {
+      "source": {
+        "owner": "ptechfusion19",
+        "name": "Repo-A"
+      },
+      "target": {
+        "owner": "ptechfusion19",
+        "name": "Repo-B"
+      }
+    },
+    "route2": {
+      "source": {
+        "owner": "ptechfusion19",
+        "name": "Org_Testing_Repo"
+      },
+      "target": {
+        "owner": "Ramzanx0553",
+        "name": "Per_Testing_Repo"
+      }
+    },
+    "route3": {
+      "source": {
+        "owner": "Ramzanx0553",
+        "name": "Repo2"
+      },
+      "target": {
+        "owner": "wajeehaafi-alt",
+        "name": "Repo1"
+      }
+    }
+  },
+  "sync": {
+    "enabled": true,
+    "auto_merge": false,
+    "create_pr": true,
+    "branch_prefix": "sync-from",
+    "max_files_per_commit": 50,
+    "timeout_seconds": 300
+  },
+  "credentials": {
+    "account4": {
+      "name": "Header Auth Account 4 For Github",
+      "owner": "Ramzanx0553"
+    },
+    "account5": {
+      "name": "Header Auth Account 5 For Github",
+      "owner": "wajeehaafi-alt"
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "log_level": "INFO",
+    "alert_on_error": true,
+    "metrics_collection": true
+  },
+  "notifications": {
+    "email": {
+      "enabled": true,
+      "on_success": false,
+      "on_error": true
+    },
+    "slack": {
+      "enabled": false
+    },
+    "webhook": {
+      "enabled": false
+    }
+  }
+}
+

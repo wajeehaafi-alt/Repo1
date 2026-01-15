@@ -1,0 +1,70 @@
+# Kubernetes Deployment Configuration
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workflow-automation
+  labels:
+    app: workflow-automation
+    version: v5.0.0
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: workflow-automation
+  template:
+    metadata:
+      labels:
+        app: workflow-automation
+    spec:
+      containers:
+      - name: n8n
+        image: n8nio/n8n:latest
+        ports:
+        - containerPort: 5678
+        env:
+        - name: N8N_BASIC_AUTH_ACTIVE
+          value: "true"
+        - name: N8N_BASIC_AUTH_USER
+          valueFrom:
+            secretKeyRef:
+              name: n8n-secrets
+              key: username
+        - name: N8N_BASIC_AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: n8n-secrets
+              key: password
+        - name: DB_TYPE
+          value: "postgresdb"
+        - name: DB_POSTGRESDB_HOST
+          value: "postgres-service"
+        - name: DB_POSTGRESDB_DATABASE
+          value: "n8n"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        volumeMounts:
+        - name: n8n-data
+          mountPath: /home/node/.n8n
+      volumes:
+      - name: n8n-data
+        persistentVolumeClaim:
+          claimName: n8n-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: workflow-automation-service
+spec:
+  selector:
+    app: workflow-automation
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5678
+  type: LoadBalancer
+

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow Control Center</title>
+    <link rel="stylesheet" href="modern_ui.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🔄 Workflow Control Center</h1>
+            <nav>
+                <button class="nav-btn active">Dashboard</button>
+                <button class="nav-btn">Sync Status</button>
+                <button class="nav-btn">Logs</button>
+                <button class="nav-btn">Settings</button>
+            </nav>
+        </header>
+        
+        <main class="main-content">
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <h3>Active Syncs</h3>
+                    <p class="stat-value" id="activeSyncs">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Files</h3>
+                    <p class="stat-value" id="totalFiles">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Success Rate</h3>
+                    <p class="stat-value" id="successRate">100%</p>
+                </div>
+            </section>
+            
+            <section class="actions">
+                <button class="btn btn-primary" onclick="startAllSyncs()">Start All Syncs</button>
+                <button class="btn btn-secondary" onclick="stopAllSyncs()">Stop All Syncs</button>
+                <button class="btn btn-info" onclick="refreshStatus()">Refresh Status</button>
+            </section>
+        </main>
+    </div>
+    <script src="event_handler.js"></script>
+    <script>
+        function startAllSyncs() { console.log('Starting all syncs...'); }
+        function stopAllSyncs() { console.log('Stopping all syncs...'); }
+        function refreshStatus() { console.log('Refreshing status...'); }
+    </script>
+</body>
+</html>
+
