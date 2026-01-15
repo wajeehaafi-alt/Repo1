@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow Status Portal</title>
+    <link rel="stylesheet" href="portal_styles.css">
+</head>
+<body>
+    <div class="portal-wrapper">
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>🔄 Workflow</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="active"><a href="#overview">Overview</a></li>
+                <li><a href="#executions">Executions</a></li>
+                <li><a href="#repositories">Repositories</a></li>
+                <li><a href="#settings">Settings</a></li>
+            </ul>
+        </nav>
+        
+        <main class="main-panel">
+            <header class="panel-header">
+                <h1>Workflow Status Portal</h1>
+                <div class="header-badges">
+                    <span class="badge badge-success" id="successBadge">0 Success</span>
+                    <span class="badge badge-warning" id="warningBadge">0 Warnings</span>
+                    <span class="badge badge-error" id="errorBadge">0 Errors</span>
+                </div>
+            </header>
+            
+            <div class="content-area">
+                <section class="status-cards">
+                    <div class="status-card">
+                        <h3>Total Executions</h3>
+                        <p class="big-number" id="totalExecutions">0</p>
+                    </div>
+                    <div class="status-card">
+                        <h3>Active Now</h3>
+                        <p class="big-number" id="activeNow">0</p>
+                    </div>
+                    <div class="status-card">
+                        <h3>Success Rate</h3>
+                        <p class="big-number" id="successRate">0%</p>
+                    </div>
+                </section>
+                
+                <section class="activity-feed">
+                    <h2>Recent Activity</h2>
+                    <div class="feed-container" id="activityFeed">
+                        <p class="empty-state">No recent activity</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="workflow_manager.js"></script>
+    <script>
+        function updateStatus() {
+            document.getElementById('totalExecutions').textContent = '1,234';
+            document.getElementById('activeNow').textContent = '5';
+            document.getElementById('successRate').textContent = '98.5%';
+        }
+        setInterval(updateStatus, 5000);
+        updateStatus();
+    </script>
+</body>
+</html>
+

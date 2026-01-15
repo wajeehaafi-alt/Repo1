@@ -1,0 +1,79 @@
+Dependency Matrix - Workflow Automation System
+==============================================
+
+Package Dependencies and Version Compatibility Matrix
+
+CORE RUNTIME:
+-------------
+n8n 1.123.5
+  ├── Node.js >= 18.0.0, < 20.0.0
+  ├── npm >= 9.0.0, < 10.0.0
+  └── PostgreSQL >= 14.0 (optional)
+
+Node.js 18.0.0
+  ├── npm 9.0.0 (bundled)
+  └── OpenSSL >= 3.0.0
+
+PYTHON STACK:
+-------------
+Python 3.9+
+  ├── requests 2.28.0
+  │   └── urllib3 >= 1.26.0, < 2.0.0
+  ├── pygithub 1.59.0
+  │   ├── requests >= 2.14.0
+  │   └── pyjwt >= 2.0.0
+  └── python-dotenv 0.20.0
+
+DATABASE:
+---------
+PostgreSQL 14.0+
+  └── psycopg2-binary 2.9.0
+
+Redis 7.0+
+  └── redis-py 4.5.0
+
+DEVELOPMENT:
+------------
+Git 2.30.0+
+Docker 20.10.0+
+  └── docker-compose 2.0.0+
+Kubernetes 1.25.0+
+  └── Helm 3.10.0+
+
+TESTING:
+--------
+pytest 7.0.0
+  ├── pytest-cov 4.0.0
+  └── pytest-asyncio 0.21.0
+
+jest 29.0.0
+  └── node >= 18.0.0
+
+BUILD TOOLS:
+------------
+webpack 5.0.0
+  ├── babel-loader >= 8.0.0
+  └── css-loader >= 6.0.0
+
+TypeScript 4.9.0
+  └── @types/node >= 18.0.0
+
+COMPATIBILITY NOTES:
+--------------------
+- n8n requires Node.js 18.x (LTS)
+- Python packages require Python 3.9+
+- PostgreSQL 14+ recommended for performance
+- Docker 20.10+ for containerization
+- Kubernetes 1.25+ for orchestration
+
+INSTALLATION ORDER:
+-------------------
+1. Install Node.js 18.x
+2. Install Python 3.9+
+3. Install PostgreSQL 14+
+4. Install n8n globally: npm install -g n8n
+5. Install Python packages: pip install -r requirements.txt
+6. Configure database connections
+7. Set up GitHub credentials
+8. Import workflow JSON
+
