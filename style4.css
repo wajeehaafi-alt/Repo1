@@ -1,0 +1,16 @@
+/* Folder 4 - CSS test file (style4.css) */
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    margin: 24px;
+    background-color: #eef6ff;
+}
+
+h1 {
+    color: #1f3b57;
+}
+
+p {
+    color: #3d5873;
+}
+
+
