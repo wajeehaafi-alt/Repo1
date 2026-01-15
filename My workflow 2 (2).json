@@ -1,0 +1,609 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "target-owner",
+              "name": "targetOwner",
+              "value": "ptechfusion19",
+              "type": "string"
+            },
+            {
+              "id": "target-repo",
+              "name": "targetRepo",
+              "value": "Repo-A",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1808,
+        48
+      ],
+      "id": "27a4a6a3-bcb8-4b11-af72-64738e93318c",
+      "name": "Set Target: Repo-B → Repo-A"
+    },
+    {
+      "parameters": {
+        "url": "https://api.github.com/repos/ptechfusion19/Repo-A/git/refs/heads/main",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github.v3+json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1520,
+        48
+      ],
+      "id": "520ba956-f90f-449d-a641-010ff6dfda8f",
+      "name": "Get SHA1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GwRnBVdtnmTa6pj8",
+          "name": "Header Auth Account 4 For Github"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.github.com/repos/ptechfusion19/Repo-A/git/refs",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github.v3+json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "ref",
+              "value": "=refs/heads/{{ $('Set Source Fields').item.json.branchName }}"
+            },
+            {
+              "name": "sha",
+              "value": "={{ $json.object.sha }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1328,
+        48
+      ],
+      "id": "618bca9c-65e7-430a-9065-3bb021bc9df9",
+      "name": "Create Branch1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GwRnBVdtnmTa6pj8",
+          "name": "Header Auth Account 4 For Github"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.github.com/repos/ptechfusion19/Repo-B/commits/{{ $('Set Source Fields').item.json.commitSha }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github.v3+json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1120,
+        48
+      ],
+      "id": "44cca9fa-ec69-42c0-a91e-8b1317cf26e3",
+      "name": "Get Commit Details1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GwRnBVdtnmTa6pj8",
+          "name": "Header Auth Account 4 For Github"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "files",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -928,
+        48
+      ],
+      "id": "08815bdd-6c79-48ac-92ca-026fa7d8f97c",
+      "name": "Split Out Files1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "not-deleted",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "removed",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -752,
+        48
+      ],
+      "id": "e98b8dc9-2f50-4403-8e2a-b3a11a03d7dc",
+      "name": "If Not Deleted1"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.github.com/repos/ptechfusion19/Repo-B/contents/{{ encodeURIComponent($json.filename) }}?ref=main",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github.v3+json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -528,
+        32
+      ],
+      "id": "16729ed0-697e-4d0a-8a30-6b4a45894edc",
+      "name": "Get File Content1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GwRnBVdtnmTa6pj8",
+          "name": "Header Auth Account 4 For Github"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.github.com/repos/ptechfusion19/Repo-B/contents/{{ encodeURIComponent($json.path) }}?ref={{ $('Set Source Fields').item.json.branchName }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github.v3+json"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -320,
+        32
+      ],
+      "id": "38e3f67c-6505-45f7-993b-e8f154894fb4",
+      "name": "Check If File Exists1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GwRnBVdtnmTa6pj8",
+          "name": "Header Auth Account 4 For Github"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "file-exists",
+              "leftValue": "={{ $json.sha }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -128,
+        32
+      ],
+      "id": "10bcacd2-2a2b-4ab0-bde9-174dae2b0a7b",
+      "name": "If File Exists1"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://api.github.com/repos/ptechfusion19/Repo-A/contents/{{ encodeURIComponent($('Get File Content1').item.json.path) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github.v3+json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "=Sync from Repo1: {{ $('Set Source Fields').item.json.commitMessage }}"
+            },
+            {
+              "name": "content",
+              "value": "={{ $('Get File Content1').item.json.content }}"
+            },
+            {
+              "name": "branch",
+              "value": "={{ $('Set Source Fields').item.json.branchName }}"
+            },
+            {
+              "name": "sha",
+              "value": "={{ $json.sha }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        80,
+        -80
+      ],
+      "id": "cbd28658-96bf-423d-8c1b-f9509f8824ff",
+      "name": "Update Existing File1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GwRnBVdtnmTa6pj8",
+          "name": "Header Auth Account 4 For Github"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://api.github.com/repos/ptechfusion19/Repo-A/contents/{{ encodeURIComponent($('Get File Content1').item.json.path) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github.v3+json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "=Sync from Repo1: {{ $('Set Source Fields').item.json.commitMessage }}"
+            },
+            {
+              "name": "content",
+              "value": "={{ $('Get File Content1').item.json.content }}"
+            },
+            {
+              "name": "branch",
+              "value": "={{ $('Set Source Fields').item.json.branchName }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        96,
+        80
+      ],
+      "id": "acd71bf9-7eea-4f9a-95a5-bdf5d0f1f4d8",
+      "name": "Create New File1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GwRnBVdtnmTa6pj8",
+          "name": "Header Auth Account 4 For Github"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        288,
+        32
+      ],
+      "id": "23f47294-3eca-4caa-8226-092a8aa35587",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.github.com/repos/ptechfusion19/Repo-A/pulls",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github.v3+json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "title",
+              "value": "=🔄 Sync from Repo1: {{ $('Set Source Fields').item.json.commitMessage }}"
+            },
+            {
+              "name": "body",
+              "value": "=## Automated Sync from Repo1\n\n**Commit Message:** {{ $('Set Source Fields').item.json.commitMessage }}\n\n**Commit SHA:** {{ $('Set Source Fields').item.json.commitSha }}\n\n**Author:** {{ $('Set Fields').item.json.authorName }}\n\n---\n*Auto-generated by n8n workflow*"
+            },
+            {
+              "name": "head",
+              "value": "={{ $('Set Source Fields').item.json.branchName }}"
+            },
+            {
+              "name": "base",
+              "value": "main"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        480,
+        32
+      ],
+      "id": "2c93a551-a8ec-4fb1-8361-9df97ea9cfed",
+      "name": "Create PR1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GwRnBVdtnmTa6pj8",
+          "name": "Header Auth Account 4 For Github"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Set Target: Repo-B → Repo-A": {
+      "main": [
+        [
+          {
+            "node": "Get SHA1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get SHA1": {
+      "main": [
+        [
+          {
+            "node": "Create Branch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Branch1": {
+      "main": [
+        [
+          {
+            "node": "Get Commit Details1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Commit Details1": {
+      "main": [
+        [
+          {
+            "node": "Split Out Files1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out Files1": {
+      "main": [
+        [
+          {
+            "node": "If Not Deleted1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Not Deleted1": {
+      "main": [
+        [
+          {
+            "node": "Get File Content1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get File Content1": {
+      "main": [
+        [
+          {
+            "node": "Check If File Exists1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If File Exists1": {
+      "main": [
+        [
+          {
+            "node": "If File Exists1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If File Exists1": {
+      "main": [
+        [
+          {
+            "node": "Update Existing File1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create New File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Existing File1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create New File1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Create PR1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "",
+  "meta": {
+    "instanceId": "151305d708accaf9ba7df3ae300984e7c14a108b131ed2d081a3bd48f670f5c4"
+  },
+  "tags": []
+}
