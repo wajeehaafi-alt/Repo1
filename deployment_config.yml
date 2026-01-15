@@ -1,0 +1,27 @@
+# Deployment Configuration for Testing
+deployment:
+  environment: "testing"
+  version: "3.0.0"
+  
+services:
+  - name: "sync-service"
+    port: 8080
+    replicas: 2
+    resources:
+      cpu: "500m"
+      memory: "512Mi"
+  
+  - name: "api-service"
+    port: 8081
+    replicas: 1
+    resources:
+      cpu: "250m"
+      memory: "256Mi"
+
+monitoring:
+  enabled: true
+  interval: 30s
+  endpoints:
+    - /health
+    - /metrics
+
