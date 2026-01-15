@@ -1,0 +1,35 @@
+{
+  "application": {
+    "name": "Workflow Automation System",
+    "version": "4.0.0",
+    "description": "Bi-directional GitHub repository sync automation"
+  },
+  "repositories": {
+    "source": {
+      "owner": "ptechfusion19",
+      "name": "Repo-A"
+    },
+    "target": {
+      "owner": "ptechfusion19",
+      "name": "Repo-B"
+    }
+  },
+  "sync": {
+    "enabled": true,
+    "auto_merge": false,
+    "create_pr": true,
+    "branch_prefix": "sync-from"
+  },
+  "notifications": {
+    "email": true,
+    "slack": false,
+    "webhook": false
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/workflow.log",
+    "max_size": "10MB",
+    "retention_days": 30
+  }
+}
+
