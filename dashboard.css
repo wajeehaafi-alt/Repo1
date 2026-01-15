@@ -1,0 +1,19 @@
+/* Test CSS File for Folder 3 - Dashboard Styles */
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+main {
+    padding: 30px;
+    background-color: #f8f9fa;
+    min-height: 400px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
