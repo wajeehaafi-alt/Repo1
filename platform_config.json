@@ -1,0 +1,142 @@
+{
+  "platform": {
+    "name": "Workflow Automation Platform",
+    "version": "5.0.0",
+    "description": "Enterprise-grade bi-directional GitHub repository sync automation",
+    "vendor": "Development Team"
+  },
+  "infrastructure": {
+    "deployment": {
+      "type": "kubernetes",
+      "namespace": "workflow-automation",
+      "replicas": 2,
+      "strategy": "rolling-update"
+    },
+    "storage": {
+      "type": "persistent-volume",
+      "size": "50Gi",
+      "class": "standard"
+    },
+    "networking": {
+      "service_type": "LoadBalancer",
+      "ingress_enabled": true,
+      "tls_enabled": true
+    }
+  },
+  "repositories": {
+    "routes": [
+      {
+        "id": "route1",
+        "name": "Repo-A ↔ Repo-B",
+        "source": {
+          "owner": "ptechfusion19",
+          "name": "Repo-A",
+          "credential": "Account 4"
+        },
+        "target": {
+          "owner": "ptechfusion19",
+          "name": "Repo-B",
+          "credential": "Account 4"
+        },
+        "enabled": true
+      },
+      {
+        "id": "route2",
+        "name": "Org_Testing ↔ Per_Testing",
+        "source": {
+          "owner": "ptechfusion19",
+          "name": "Org_Testing_Repo",
+          "credential": "Account 4"
+        },
+        "target": {
+          "owner": "Ramzanx0553",
+          "name": "Per_Testing_Repo",
+          "credential": "Account 4"
+        },
+        "enabled": true
+      },
+      {
+        "id": "route3",
+        "name": "Repo1 ↔ Repo2",
+        "source": {
+          "owner": "Ramzanx0553",
+          "name": "Repo2",
+          "credential": "Account 4"
+        },
+        "target": {
+          "owner": "wajeehaafi-alt",
+          "name": "Repo1",
+          "credential": "Account 5"
+        },
+        "enabled": true
+      }
+    ]
+  },
+  "sync": {
+    "settings": {
+      "enabled": true,
+      "auto_merge": false,
+      "create_pr": true,
+      "branch_prefix": "sync-from",
+      "max_files_per_commit": 50,
+      "timeout_seconds": 300,
+      "retry_attempts": 3,
+      "retry_delay_seconds": 5
+    },
+    "filters": {
+      "ignore_patterns": [
+        "*.log",
+        "*.tmp",
+        ".gitignore",
+        "node_modules/**"
+      ],
+      "include_extensions": [
+        ".py", ".js", ".html", ".css", ".cpp", ".md", ".json", ".yaml", ".yml"
+      ]
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "metrics": {
+      "enabled": true,
+      "port": 9090,
+      "path": "/metrics"
+    },
+    "logging": {
+      "level": "INFO",
+      "format": "json",
+      "output": "stdout",
+      "file": {
+        "enabled": true,
+        "path": "/var/log/workflow",
+        "max_size": "100MB",
+        "max_files": 10,
+        "retention_days": 30
+      }
+    },
+    "alerts": {
+      "enabled": true,
+      "channels": ["email", "slack"],
+      "thresholds": {
+        "error_rate": 0.05,
+        "sync_duration_seconds": 300
+      }
+    }
+  },
+  "security": {
+    "authentication": {
+      "type": "oauth2",
+      "provider": "github"
+    },
+    "encryption": {
+      "at_rest": true,
+      "in_transit": true
+    },
+    "secrets_management": {
+      "provider": "kubernetes-secrets",
+      "rotation_enabled": true,
+      "rotation_interval_days": 90
+    }
+  }
+}
+

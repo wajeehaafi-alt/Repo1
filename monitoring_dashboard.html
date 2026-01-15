@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow Monitoring Dashboard</title>
+    <link rel="stylesheet" href="dashboard_styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>📊 Workflow Monitoring Dashboard</h1>
+            <div class="header-actions">
+                <button class="btn-refresh" onclick="refreshDashboard()">🔄 Refresh</button>
+                <button class="btn-export" onclick="exportData()">📥 Export</button>
+            </div>
+        </header>
+        
+        <div class="dashboard-content">
+            <section class="metrics-section">
+                <div class="metric-card">
+                    <div class="metric-icon">⚡</div>
+                    <div class="metric-info">
+                        <h3>Active Workflows</h3>
+                        <p class="metric-value" id="activeWorkflows">0</p>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">📁</div>
+                    <div class="metric-info">
+                        <h3>Files Synced</h3>
+                        <p class="metric-value" id="filesSynced">0</p>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">✅</div>
+                    <div class="metric-info">
+                        <h3>Success Rate</h3>
+                        <p class="metric-value" id="successRate">100%</p>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">⏱️</div>
+                    <div class="metric-info">
+                        <h3>Avg Sync Time</h3>
+                        <p class="metric-value" id="avgSyncTime">0s</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="activity-section">
+                <h2>Recent Activity</h2>
+                <div class="activity-list" id="activityList">
+                    <p class="no-activity">No recent activity</p>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script src="task_scheduler.js"></script>
+    <script>
+        function refreshDashboard() {
+            console.log('Refreshing dashboard...');
+            document.getElementById('activeWorkflows').textContent = '3';
+            document.getElementById('filesSynced').textContent = '127';
+        }
+        function exportData() {
+            console.log('Exporting data...');
+        }
+    </script>
+</body>
+</html>
+

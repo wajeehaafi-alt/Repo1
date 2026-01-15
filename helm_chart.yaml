@@ -1,0 +1,73 @@
+# Helm Chart for Workflow Automation Deployment
+apiVersion: v2
+name: workflow-automation
+description: A Helm chart for deploying workflow automation system
+type: application
+version: 5.0.0
+appVersion: "5.0.0"
+
+dependencies:
+  - name: postgresql
+    version: 12.1.0
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: redis
+    version: 17.3.0
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled
+
+values:
+  replicaCount: 2
+  
+  image:
+    repository: n8nio/n8n
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  
+  service:
+    type: LoadBalancer
+    port: 80
+    targetPort: 5678
+  
+  ingress:
+    enabled: true
+    className: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    hosts:
+      - host: workflow.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: workflow-tls
+        hosts:
+          - workflow.example.com
+  
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+  
+  postgresql:
+    enabled: true
+    auth:
+      database: n8n
+      username: n8n
+      password: ""
+  
+  redis:
+    enabled: true
+    auth:
+      enabled: false
+
